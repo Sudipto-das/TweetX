@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const database_1 = require("../database");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const middleware_1 = require("../middleware");
 const router = express_1.default.Router();
-const secretKey = "helloworld";
 router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, password } = req.body;
@@ -26,7 +26,8 @@ router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function*
         }
         const newUser = new database_1.User({ username, password });
         yield newUser.save();
-        const token = jsonwebtoken_1.default.sign({ username }, secretKey, { expiresIn: '10h' });
+        const token = jsonwebtoken_1.default.sign({ id: newUser._id }, middleware_1.secretKey, { expiresIn: '10h' });
+        res.json({ message: 'signup sucsessfully', token });
     }
     catch (error) {
         console.error(error);
@@ -40,7 +41,8 @@ router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         if (!user) {
             return res.status(404).json({ message: 'user not register' });
         }
-        const token = jsonwebtoken_1.default.sign({ username }, secretKey, { expiresIn: "10h" });
+        const token = jsonwebtoken_1.default.sign({ id: user._id }, middleware_1.secretKey, { expiresIn: "10h" });
+        res.json({ message: 'Logged in successfully', token });
     }
     catch (error) {
         console.error(error);

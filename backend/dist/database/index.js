@@ -8,7 +8,6 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const userSchema = new mongoose_1.default.Schema({
     username: String,
     password: String,
-    post: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: "Post" }],
     followers: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: 'User' }],
     following: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: 'User' }]
 });
@@ -17,6 +16,8 @@ const postSchema = new mongoose_1.default.Schema({
     description: String,
     like: Number,
     created_at: Date,
+    userId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'User' },
+    likes: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: 'User' }]
 });
 const User = mongoose_1.default.model('user', userSchema);
 exports.User = User;

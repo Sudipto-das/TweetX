@@ -7,11 +7,13 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const cors_1 = __importDefault(require("cors"));
 const userAuth_1 = __importDefault(require("./routes/userAuth"));
+const post_1 = __importDefault(require("./routes/post"));
 const PORT = 8001;
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use('/auth', userAuth_1.default);
+app.use('/post', post_1.default);
 app.listen(PORT, () => {
     console.log(`server running at ${PORT}`);
 });
