@@ -19,13 +19,12 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const router = express_1.default.Router();
 router.post('/create', middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { title, description } = req.body;
+        const { description } = req.body;
         const userId = req.headers["userId"];
         if (!userId || typeof userId !== 'string') {
             return res.sendStatus(403);
         }
         const newPost = {
-            title,
             description,
             like: 0,
             created_at: new Date(),
@@ -33,7 +32,8 @@ router.post('/create', middleware_1.default, (req, res) => __awaiter(void 0, voi
             likes: []
         };
         const savePost = yield database_1.Post.create(newPost);
-        res.json(savePost);
+        const populatedPost = yield database_1.Post.findById(savePost._id).populate('userId');
+        res.json(populatedPost);
     }
     catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
@@ -94,9 +94,20 @@ router.put('/follow/:followId', middleware_1.default, (req, res) => __awaiter(vo
         res.status(500).json({ "message": 'internal server error' });
     }
 }));
+router.get('/users', middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const UserId = req.headers["userId"];
+        const users = yield database_1.User.find({ _id: { $ne: UserId } });
+        res.json(users);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ massege: 'internal server error' });
+    }
+}));
 router.get('/posts', middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const allPosts = yield database_1.Post.find({});
+        const allPosts = yield database_1.Post.find({}).populate("userId");
         res.json(allPosts);
     }
     catch (error) {

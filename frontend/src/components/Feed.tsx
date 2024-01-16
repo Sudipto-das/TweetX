@@ -1,20 +1,7 @@
 import { useEffect, useState } from "react"
 import { postState } from "../store/atoms/post";
 import { useRecoilState } from "recoil";
-interface User {
-    username: string;
-}
-interface Post {
 
-    id: string;
-    title: string;
-    description: string;
-    like: number;
-    likes: [];
-    created_at: string;
-    userId: User
-    timeAgo: string
-}
 
 const Feed = () => {
     const calculateTimeAgo = (createdAt: string): string => {
@@ -86,8 +73,8 @@ const Feed = () => {
         fetchPosts()
     }, [])
     return <>
-        <div className="w-full m-auto mt-24 flex flex-col md:w-1/2 relative">
-            <button className="bg-pink-400 px-10 py-4 rounded-md font-bold w-1/12 shadow-xl text-lg hover:bg-pink-900 fixed top-25 z-10" style={{ color: '  #fdedec  ' }} onClick={handleOpenModal}>Write</button>
+        <div className="w-full m-auto mt-24 mb-10 flex flex-col md:w-1/2 relative">
+            <button className="bg-rose-500 px-10 py-4 rounded-md font-bold w-1/12 shadow-xl text-lg hover:bg-pink-900 fixed top-25 z-10" style={{ color: '  #fdedec  ' }} onClick={handleOpenModal}>Write</button>
 
             {posts.map(post => (
                 <div key={post.id} className="rounded shadow-xl mt-20 px-10 py-4 ">
@@ -114,7 +101,7 @@ const Feed = () => {
                             onChange={(e) => { setPostContent(e.target.value) }}
                         />
                         <button
-                            className="bg-pink-400 px-4 py-2 rounded-md  mt-5 text-gray-100 font-medium"
+                            className="bg-pink-500 px-4 py-2 rounded-md  mt-5 text-gray-100 font-medium shadow-xl hover:bg-rose-500"
                             onClick={handlePost}
                         >
                             POST

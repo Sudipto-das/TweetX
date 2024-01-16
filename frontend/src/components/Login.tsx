@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { userState } from "../store/atoms/user"
 import { useSetRecoilState } from "recoil"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 const Login = () => {
     const navigate = useNavigate()
     
@@ -41,7 +41,7 @@ const Login = () => {
         <div className="flex flex-col items-start  p-6 md:flex-row md:p-20 ">
             <div className="w-full md:w-1/2 mb-10 md:mb-0  ">
                 <div className="text-pink-400 text-3xl font-medium">TweetX</div>
-                <button className="font-medium py-2 px-12 rounded border border-gray-500 mt-10 hover:border-pink-500">Create account</button>
+                <button className="font-medium py-2 px-12 rounded border border-gray-500 mt-10 hover:border-pink-500"> <Link to={"/"}>Create account</Link></button>
                 <div className="text-gray-500 text-3xl font-semibold mt-16">Login</div>
                 <form className="w-full mt-10 flex flex-col" onSubmit={handleSubmit}>
                     {/* Add your form elements here */}

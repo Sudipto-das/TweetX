@@ -1,17 +1,17 @@
 import express from 'express';
 import { User } from '../database';
 import jwt from 'jsonwebtoken'
-import { secretKey } from '../middleware';
+import authentication, { secretKey } from '../middleware';
 const router = express.Router();
 
 router.post('/signup', async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const user = await User.findOne({ username })
+        const { email,username, password } = req.body;
+        const user = await User.findOne({ email })
         if (user) {
             return res.status(404).json({ message: "user already registerd" })
         }
-        const newUser = new User({ username, password })
+        const newUser = new User({ email,username, password })
         await newUser.save()
 
         const token = jwt.sign({ id: newUser._id }, secretKey, { expiresIn: '10h' })
@@ -25,8 +25,8 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
 
     try {
-        const { username, password } = req.body;
-        const user = await User.findOne({ username })
+        const { email, password } = req.body;
+        const user = await User.findOne({ email })
         if (!user) {
             return res.status(404).json({ message: 'user not register' })
         }
@@ -36,6 +36,14 @@ router.post('/login', async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
 
+    }
+})
+router.get('/me',authentication,async(req,res)=>{
+    try{
+        const user = req.headers['userId']
+        res.json(user)
+    }catch(error){
+        res.status(500).json({message:'internal server error'})
     }
 })
 

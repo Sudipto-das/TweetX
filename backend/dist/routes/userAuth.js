@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -15,16 +34,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const database_1 = require("../database");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const middleware_1 = require("../middleware");
+const middleware_1 = __importStar(require("../middleware"));
 const router = express_1.default.Router();
 router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { username, password } = req.body;
-        const user = yield database_1.User.findOne({ username });
+        const { email, username, password } = req.body;
+        const user = yield database_1.User.findOne({ email });
         if (user) {
             return res.status(404).json({ message: "user already registerd" });
         }
-        const newUser = new database_1.User({ username, password });
+        const newUser = new database_1.User({ email, username, password });
         yield newUser.save();
         const token = jsonwebtoken_1.default.sign({ id: newUser._id }, middleware_1.secretKey, { expiresIn: '10h' });
         res.json({ message: 'signup sucsessfully', token });
@@ -36,8 +55,8 @@ router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function*
 }));
 router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { username, password } = req.body;
-        const user = yield database_1.User.findOne({ username });
+        const { email, password } = req.body;
+        const user = yield database_1.User.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: 'user not register' });
         }
@@ -47,6 +66,15 @@ router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
+    }
+}));
+router.get('/me', middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.headers['userId'];
+        res.json(user);
+    }
+    catch (error) {
+        res.status(500).json({ message: 'internal server error' });
     }
 }));
 exports.default = router;

@@ -1,9 +1,9 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 interface User extends Document {
+    email:string;
     username: string;
     password: string;
-    post: mongoose.Types.ObjectId[] | Post[];
     followers: mongoose.Types.ObjectId[];
     following: mongoose.Types.ObjectId[]
 }
@@ -17,15 +17,15 @@ interface Post extends Document {
 }
 
 const userSchema: Schema<User> = new mongoose.Schema({
+    email:String,
     username: String,
     password: String,
-
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 })
 
 const postSchema: Schema<Post> = new mongoose.Schema({
-    title: String,
+    
     description: String,
     like: Number,
     created_at: Date,
@@ -33,7 +33,7 @@ const postSchema: Schema<Post> = new mongoose.Schema({
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 })
 
-const User = mongoose.model<User>('user', userSchema);
-const Post = mongoose.model<Post>('post', postSchema);
+const User = mongoose.model<User>('User', userSchema);
+const Post = mongoose.model<Post>('Post', postSchema);
 
 export { User, Post }
