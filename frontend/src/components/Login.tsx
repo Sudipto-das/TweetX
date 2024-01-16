@@ -1,7 +1,10 @@
 import { useState } from "react"
 import { userState } from "../store/atoms/user"
 import { useSetRecoilState } from "recoil"
+import { useNavigate } from "react-router-dom"
 const Login = () => {
+    const navigate = useNavigate()
+    
     const setUser = useSetRecoilState(userState)
     const [formData,setFormData] = useState({
         email:'',
@@ -20,7 +23,7 @@ const Login = () => {
         const response = await fetch('http://localhost:8001/auth/login',{
             method:'POST',
             body:JSON.stringify({
-                username:formData.email,
+                email:formData.email,
                 password:formData.password
             }),
             headers:{
@@ -31,6 +34,7 @@ const Login = () => {
             const data = await response.json()
             localStorage.setItem("token",data.token)
             setUser({isLoading:false,user:{username:formData.email}})
+            navigate('/feed')
         }
     }
     return <>
@@ -62,7 +66,7 @@ const Login = () => {
                         required
                         onChange={handleInputChange}
                     />
-
+                    <p></p>
                     <button className="font-medium py-3 px-6 rounded bg-pink-500 mt-10 w-1/3 md:w-1/5">Login</button>
                 </form>
             </div>
