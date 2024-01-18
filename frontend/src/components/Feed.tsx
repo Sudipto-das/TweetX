@@ -11,18 +11,18 @@ const Feed = () => {
         const TimeDiff = CurrentDate.getTime() - CreatedDate.getTime()
         const seconds = Math.floor(TimeDiff / 1000)
         if (seconds < 60) {
-            return `${seconds} sec${seconds != 1 ? 's' : ''} ago`
+            return `${seconds} second${seconds != 1 ? 's' : ''} ago`
         }
         const minutes = Math.floor(seconds / 60)
         if (minutes < 60) {
-            return `${minutes} min${minutes != 1 ? 's' : ''} ago`
+            return `${minutes} minute${minutes != 1 ? 's' : ''} ago`
         }
         const hours = Math.floor(minutes / 60)
         if (hours < 24) {
             return `${hours} hour${hours != 1 ? 's' : ''} ago`
         }
         const days = Math.floor(hours / 24)
-        return `${days} days${days != 1 ? 's' : ''} ago`
+        return `${days} day${days != 1 ? 's' : ''} ago`
     }
 
     const [posts, setPosts] = useRecoilState(postState)
@@ -45,7 +45,7 @@ const Feed = () => {
         if (response.ok) {
             const newPost = await response.json()
             setPosts((prevPost) => [ newPost,...prevPost])
-            console.log(newPost)
+            
             setIsOpenModal(false)
 
         }
@@ -76,8 +76,8 @@ const Feed = () => {
         <div className="w-full m-auto mt-24 mb-10 flex flex-col md:w-1/2 relative">
             <button className="bg-rose-500 px-10 py-4 rounded-md font-bold w-1/12 shadow-xl text-lg hover:bg-pink-900 fixed top-25 z-10" style={{ color: '  #fdedec  ' }} onClick={handleOpenModal}>Write</button>
 
-            {posts.map(post => (
-                <div key={post.id} className="rounded shadow-xl mt-20 px-10 py-4 ">
+            {posts.slice().reverse().map(post => (
+                <div key={post._id} className="rounded shadow-xl mt-20 px-10 py-4 ">
                     <div className="mb-2 font-medium text-2xl">{post.userId.username}</div>
                     <div>{post.description}</div>
                     <div className="text-sm text-right">{post.timeAgo}</div>

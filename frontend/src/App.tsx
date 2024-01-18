@@ -6,7 +6,7 @@ import Login from './components/Login';
 import Feed from './components/Feed';
 import {BrowserRouter as Router, Route,Routes } from 'react-router-dom';
 import Appber from './components/Appber';
-import Users from './components/Users';
+import MyUsers from './components/Users';
 import { useSetRecoilState } from 'recoil';
 import { userState } from './store/atoms/user';
 import { useEffect } from 'react';
@@ -22,7 +22,7 @@ function App() {
           <Route path='/' element={<Signup/>}></Route>
           <Route path='/login' element={<Login/>}></Route>
           <Route path='/feed' element={<Feed/>}></Route>
-          <Route path='/users' element={<Users/>}></Route>
+          <Route path='/users' element={<MyUsers/>}></Route>
         </Routes>
       </Router>
     </>
@@ -43,10 +43,10 @@ export function InitUser(){
       if(response.ok){
         const data = await response.json()
         if (data) {
-          setUser({isLoading:false,user:{username:data}});
+          setUser({isLoading:false,user:{id:data._id,username:data.username,followers:data.followers,following:data.following}});
           console.log(data);
         } else {
-          setUser({ isLoading: true, user: { username: null } })
+          setUser({ isLoading: true, user:  null  })
           
         }
       }

@@ -37,7 +37,7 @@ const Signup = () => {
             if(response.ok){
                 const data = await response.json()
                 localStorage.setItem("token" ,data.token)
-                setUser({isLoading:false,user:{username:formData.email}})
+                setUser({isLoading:false,user:{id:data.newUser._id,username:data.newUser.username,followers:data.newUser.followers,following:data.newUser.following}})
                 navigate("/feed")
                 console.log(data)
             }

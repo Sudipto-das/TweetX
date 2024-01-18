@@ -1,12 +1,85 @@
-const Users = () => {
+import { useEffect, useState } from "react"
+import { usersState, Users } from "../store/atoms/users";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { userState } from "../store/atoms/user";
 
-    return <div className="">
-        In this example:
+const MyUsers = () => {
+    const [users, setUsers] = useRecoilState<Users[]>(usersState)
+    const userId = useRecoilValue(userState)
+    const handleFollow = async (followId: string) => {
+        console.log(followId)
+        try {
+            const response = await fetch(`http://localhost:8001/post/follow/${followId}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                    'Content-Type': 'application/json',
+                }
+            })
+            if (response.ok) {
+                const updatedUser = users.map(user => {
+                    if (user._id === followId) {
+                        return { ...user, followers:[...user.followers, userId.user?.id || ''] }
+                    }
+                    return user;
+                })
+                setUsers(updatedUser)
+                const data = await response.json()
+            }
 
-        The getCurrentUser middleware is used to attach the current user to the req object.
-        The /users endpoint retrieves all users from the MongoDB collection excluding the current user using the $ne (not equal) operator.
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const fetchUser = async () => {
+        try {
+            const response = await fetch('http://localhost:8001/post/users', {
+                method: 'GET',
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                    'Content-Type': 'application/json',
+                }
+            })
+            if (response.ok) {
+                const data = await response.json()
+                setUsers(data)
+                console.log(data)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    useEffect(() => {
+        fetchUser()
+    }, [])
+    return <div className=" w-full m-auto mt-28 mb-10 flex flex-col md:w-2/5 relative">
 
-        Make sure to adjust the code according to your actual setup and authentication mechanism. This is a basic example, and you might need to add additional error handling and security measures based on your application requirements.
+        {users.map(user => (
+            <>
+                <div className="rounded px-12 py-8 flex justify-between ">
+                    <div>
+                        <div className="text-2xl mb-3 font-medium">{user.username}</div>
+                        <div className="text-sm font-extralight">following : {user.following.length}</div>
+                    </div>
+                    {user.followers.includes(userId.user?.id || "") ? (
+                        <div className="flex items-center px-4 ">
+                            <div className="text-rose-400 font-medium ">Following</div>
+                        </div>
+                    ) : (
+                        <div>
+                            <button
+                                className="rounded-xl px-6 py-3 bg-rose-400 text-white font-medium shadow-lg"
+                                onClick={() => handleFollow(user._id)}
+                            >
+                                Follow
+                            </button>
+                        </div>
+                    )}
+                </div>
+                <hr />
+            </>
+        ))}
+
     </div>
 }
-export default Users
+export default MyUsers
