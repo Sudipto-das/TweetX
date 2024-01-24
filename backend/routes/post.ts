@@ -116,4 +116,17 @@ router.get('/posts', authentication, async (req, res) => {
         res.status(500).json({ message: 'internal server error' })
     }
 })
+router.get('/myposts',authentication,async(req,res) =>{
+    try {
+        const userId = req.headers['userId'];
+        if (!userId || typeof userId != 'string') {
+            return res.status(403)
+        }
+        const myPosts = await Post.find({ 'userId': new mongoose.Types.ObjectId(userId) }).populate("userId");
+        res.json(myPosts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+})
 export default router;

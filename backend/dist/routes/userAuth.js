@@ -46,7 +46,7 @@ router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function*
         const newUser = new database_1.User({ email, username, password });
         yield newUser.save();
         const token = jsonwebtoken_1.default.sign({ id: newUser._id }, middleware_1.secretKey, { expiresIn: '10h' });
-        res.json({ message: 'signup sucsessfully', token });
+        res.json({ message: 'signup sucsessfully', token, newUser });
     }
     catch (error) {
         console.error(error);
@@ -56,12 +56,14 @@ router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function*
 router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
-        const user = yield database_1.User.findOne({ email });
+        const user = yield database_1.User.findOne({ email })
+            .populate('following')
+            .populate('followers');
         if (!user) {
             return res.status(404).json({ message: 'user not register' });
         }
         const token = jsonwebtoken_1.default.sign({ id: user._id }, middleware_1.secretKey, { expiresIn: "10h" });
-        res.json({ message: 'Logged in successfully', token });
+        res.json({ message: 'Logged in successfully', token, user });
     }
     catch (error) {
         console.error(error);
@@ -70,7 +72,11 @@ router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* 
 }));
 router.get('/me', middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = req.headers['userId'];
+        const userId = req.headers['userId'];
+        console.log(userId);
+        const user = yield database_1.User.findById(userId)
+            .populate('following')
+            .populate('followers');
         res.json(user);
     }
     catch (error) {

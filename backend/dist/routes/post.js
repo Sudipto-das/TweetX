@@ -115,4 +115,18 @@ router.get('/posts', middleware_1.default, (req, res) => __awaiter(void 0, void 
         res.status(500).json({ message: 'internal server error' });
     }
 }));
+router.get('/myposts', middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.headers['userId'];
+        if (!userId || typeof userId != 'string') {
+            return res.status(403);
+        }
+        const myPosts = yield database_1.Post.find({ 'userId': new mongoose_1.default.Types.ObjectId(userId) }).populate("userId");
+        res.json(myPosts);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}));
 exports.default = router;
