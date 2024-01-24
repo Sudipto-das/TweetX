@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react"
 import { usersState, Users } from "../store/atoms/users";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { userState } from "../store/atoms/user";
+import { userState, User } from "../store/atoms/user";
 
 const MyUsers = () => {
     const [users, setUsers] = useRecoilState<Users[]>(usersState)
+    const [user, setUser] = useRecoilState<{ isLoading: boolean, user: null | User }>(userState)
+    
     const userId = useRecoilValue(userState)
     const handleFollow = async (followId: string) => {
-        console.log(followId)
+
         try {
             const response = await fetch(`http://localhost:8001/post/follow/${followId}`, {
                 method: 'PUT',
@@ -17,14 +19,26 @@ const MyUsers = () => {
                 }
             })
             if (response.ok) {
+                const data = await response.json()
+
+                setUser((prevUser)=>({
+                    ...prevUser,
+                    user:{
+                        ...prevUser.user!,
+                        following:[...prevUser.user!.following,{id:data._id,username:data.username}]
+                    }
+                }))
+                console.log(user)
                 const updatedUser = users.map(user => {
                     if (user._id === followId) {
-                        return { ...user, followers:[...user.followers, userId.user?.id || ''] }
+                        return { ...user, followers: [...user.followers, userId.user?.id || ''] }
                     }
                     return user;
                 })
                 setUsers(updatedUser)
-                const data = await response.json()
+                
+                
+                
             }
 
         } catch (error) {
@@ -43,7 +57,7 @@ const MyUsers = () => {
             if (response.ok) {
                 const data = await response.json()
                 setUsers(data)
-                console.log(data)
+                
             }
         } catch (error) {
             console.log(error)

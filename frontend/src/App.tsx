@@ -10,6 +10,7 @@ import MyUsers from './components/Users';
 import { useSetRecoilState } from 'recoil';
 import { userState } from './store/atoms/user';
 import { useEffect } from 'react';
+import Profile from './components/Profile';
 function App() {
 
 
@@ -23,6 +24,7 @@ function App() {
           <Route path='/login' element={<Login/>}></Route>
           <Route path='/feed' element={<Feed/>}></Route>
           <Route path='/users' element={<MyUsers/>}></Route>
+          <Route path='/profile' element={<Profile/>}></Route>
         </Routes>
       </Router>
     </>

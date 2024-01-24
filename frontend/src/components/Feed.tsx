@@ -1,29 +1,10 @@
 import { useEffect, useState } from "react"
 import { postState } from "../store/atoms/post";
 import { useRecoilState } from "recoil";
-
+import { calculateTimeAgo } from "../utils/timeUtils";
 
 const Feed = () => {
-    const calculateTimeAgo = (createdAt: string): string => {
-        const CreatedDate = new Date(createdAt)
-        const CurrentDate = new Date()
-
-        const TimeDiff = CurrentDate.getTime() - CreatedDate.getTime()
-        const seconds = Math.floor(TimeDiff / 1000)
-        if (seconds < 60) {
-            return `${seconds} second${seconds != 1 ? 's' : ''} ago`
-        }
-        const minutes = Math.floor(seconds / 60)
-        if (minutes < 60) {
-            return `${minutes} minute${minutes != 1 ? 's' : ''} ago`
-        }
-        const hours = Math.floor(minutes / 60)
-        if (hours < 24) {
-            return `${hours} hour${hours != 1 ? 's' : ''} ago`
-        }
-        const days = Math.floor(hours / 24)
-        return `${days} day${days != 1 ? 's' : ''} ago`
-    }
+    
 
     const [posts, setPosts] = useRecoilState(postState)
     const [postContent, setPostContent] = useState('')
@@ -44,8 +25,8 @@ const Feed = () => {
         })
         if (response.ok) {
             const newPost = await response.json()
-            setPosts((prevPost) => [ newPost,...prevPost])
-            
+            setPosts((prevPost) => [ ...prevPost,newPost])
+
             setIsOpenModal(false)
 
         }
@@ -66,7 +47,7 @@ const Feed = () => {
                 }
             ))
             setPosts(postsWithTime)
-            console.log(data)
+            
         }
     }
     useEffect(() => {
@@ -101,7 +82,7 @@ const Feed = () => {
                             onChange={(e) => { setPostContent(e.target.value) }}
                         />
                         <button
-                            className="bg-pink-500 px-4 py-2 rounded-md  mt-5 text-gray-100 font-medium shadow-xl hover:bg-rose-500"
+                            className="bg-rose-500 px-4 py-2 rounded-md  mt-5 text-gray-100 font-medium shadow-xl hover:bg-rose-700"
                             onClick={handlePost}
                         >
                             POST
