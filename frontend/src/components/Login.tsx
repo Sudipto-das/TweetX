@@ -74,7 +74,7 @@ const Login = () => {
             </div>
             <div className="md:w-1/2 hidden md:block ">
                 {/* Add your image here */}
-                <img src="/src/assets/happy-man-online-dating-via-laptop_74855-7495.avif" alt="Your Image" className="w-2/3 h-auto rounded-lg" />
+                <img src="https://img.freepik.com/free-vector/happy-man-online-dating-via-laptop_74855-7495.jpg?w=826&t=st=1706160344~exp=1706160944~hmac=7fd41670c7afce08dbc93d20bad6ac5f432a797a12f25c51a7ddca99585e3f4c" alt="Your Image" className="w-2/3 h-auto rounded-lg" />
             </div>
         </div>
 
