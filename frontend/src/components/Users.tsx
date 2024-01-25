@@ -1,17 +1,18 @@
-import { useEffect, useState } from "react"
+import { useEffect,  } from "react"
 import { usersState, Users } from "../store/atoms/users";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userState, User } from "../store/atoms/user";
+import config from "../config";
 
 const MyUsers = () => {
     const [users, setUsers] = useRecoilState<Users[]>(usersState)
     const [user, setUser] = useRecoilState<{ isLoading: boolean, user: null | User }>(userState)
-    
+    const url = config.backendUrl
     const userId = useRecoilValue(userState)
     const handleFollow = async (followId: string) => {
 
         try {
-            const response = await fetch(`http://localhost:8001/post/follow/${followId}`, {
+            const response = await fetch(`${url}/post/follow/${followId}`, {
                 method: 'PUT',
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -47,7 +48,7 @@ const MyUsers = () => {
     }
     const fetchUser = async () => {
         try {
-            const response = await fetch('http://localhost:8001/post/users', {
+            const response = await fetch(`${url}/post/users`, {
                 method: 'GET',
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),

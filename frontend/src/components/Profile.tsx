@@ -3,14 +3,16 @@ import { User, userState } from "../store/atoms/user";
 import { Post } from "../store/atoms/post";
 import { useEffect, useState } from "react";
 import { calculateTimeAgo } from "../utils/timeUtils";
+import config from "../config";
 const Profile = () => {
     const user = useRecoilValue(userState)
     const [myPosts, setMyPosts] = useState<Post[]>([])
     const [loading, setLoading] = useState(true)
     const [activeComponent, setActiveComponent] = useState('posts')
+    const url = config.backendUrl
     const fetchUserPosts = async () => {
         try {
-            const response = await fetch('http://localhost:8001/post/myposts', {
+            const response = await fetch(`${url}/post/myposts`, {
                 method: 'GET',
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -74,7 +76,7 @@ const Posts = ({ posts, loading }: { posts: Post[], loading: boolean }) => {
                         User has not posted anything yet.
                     </div>
                 ) : (
-                    posts.map(post => (
+                    posts.slice().reverse().map(post => (
                         <div key={post._id} className="rounded-xl shadow-xl mt-10 px-10 py-4 border">
                             <div className="mb-2 font-medium text-2xl">{post.userId.username}</div>
                             <div>{post.description}</div>

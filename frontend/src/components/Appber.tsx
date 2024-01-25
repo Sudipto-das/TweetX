@@ -1,11 +1,11 @@
-import { useRecoilState,  } from "recoil";
+import { useRecoilState, } from "recoil";
 import { userState } from "../store/atoms/user";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 const Appber = () => {
     const location = useLocation();
     const navigate = useNavigate()
     const [user, setUser] = useRecoilState(userState)
-    console.log(user)
+
     return <>
 
         {user.user?.id && <div className="w-full flex py-5 shadow-lg fixed top-0 z-10 bg-white">

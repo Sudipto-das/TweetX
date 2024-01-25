@@ -2,9 +2,11 @@ import { useState } from "react";
 import { userState } from "../store/atoms/user";
 import { useSetRecoilState } from "recoil";
 import { useNavigate,Link } from "react-router-dom";
+import config from "../config";
 
 const Signup = () => {
     const navigate = useNavigate()
+    const url = config.backendUrl
     const [formData,setFormData] = useState({
         name:'',
         email:'',
@@ -23,7 +25,7 @@ const Signup = () => {
         e.preventDefault();
         console.log('handlesubmit')
         try{
-            const response = await fetch('http://localhost:8001/auth/signup',{
+            const response = await fetch(`${url}/auth/signup`,{
                 method:'POST',
                 body:JSON.stringify({
                     email:formData.email,

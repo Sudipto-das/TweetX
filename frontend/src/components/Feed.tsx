@@ -2,10 +2,11 @@ import { useEffect, useState } from "react"
 import { postState } from "../store/atoms/post";
 import { useRecoilState } from "recoil";
 import { calculateTimeAgo } from "../utils/timeUtils";
+import config from "../config";
 
 const Feed = () => {
     
-
+    const url = config.backendUrl
     const [posts, setPosts] = useRecoilState(postState)
     const [postContent, setPostContent] = useState('')
     const [isOpenModal, setIsOpenModal] = useState(false)
@@ -13,7 +14,7 @@ const Feed = () => {
         setIsOpenModal(true)
     }
     const handlePost = async () => {
-        const response = await fetch('http://localhost:8001/post/create', {
+        const response = await fetch(`${url}/post/create`, {
             method: 'POST',
             body: JSON.stringify({
                 description: postContent
@@ -32,7 +33,7 @@ const Feed = () => {
         }
     }
     const fetchPosts = async () => {
-        const response = await fetch('http://localhost:8001/post/posts', {
+        const response = await fetch(`${url}/post/posts`, {
             method: 'GET',
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),

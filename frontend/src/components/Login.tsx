@@ -2,9 +2,10 @@ import { useState } from "react"
 import { userState } from "../store/atoms/user"
 import { useSetRecoilState } from "recoil"
 import { Link, useNavigate } from "react-router-dom"
+import config from "../config"
 const Login = () => {
     const navigate = useNavigate()
-    
+    const url = config.backendUrl
     const setUser = useSetRecoilState(userState)
     const [formData,setFormData] = useState({
         email:'',
@@ -20,7 +21,7 @@ const Login = () => {
     }
     const handleSubmit=async (e: { preventDefault: () => void; })=>{
         e.preventDefault()
-        const response = await fetch('http://localhost:8001/auth/login',{
+        const response = await fetch(`${url}/auth/login`,{
             method:'POST',
             body:JSON.stringify({
                 email:formData.email,
