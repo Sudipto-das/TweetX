@@ -1,5 +1,5 @@
 const config = {
-    backendUrl: 'http://localhost:8001',
+    backendUrl: 'https://tweetx-3wmw.onrender.com',
 };
 
 export default config;

@@ -4,6 +4,7 @@ import { Post } from "../store/atoms/post";
 import { useEffect, useState } from "react";
 import { calculateTimeAgo } from "../utils/timeUtils";
 import config from "../config";
+import { BsFillHeartFill } from "react-icons/bs";
 const Profile = () => {
     const user = useRecoilValue(userState)
     const [myPosts, setMyPosts] = useState<Post[]>([])
@@ -48,6 +49,7 @@ const Profile = () => {
                     <div className="text-md font-light">Followers : {user.user?.followers.length}</div>
                     <div className="text-md font-light">Following : {user.user?.following.length}</div>
                     <div className="text-md font-light">Posts : {myPosts.length}</div>
+
                 </div>
             </div>
         </div>
@@ -81,6 +83,11 @@ const Posts = ({ posts, loading }: { posts: Post[], loading: boolean }) => {
                             <div className="mb-2 font-medium text-2xl">{post.userId.username}</div>
                             <div>{post.description}</div>
                             <div className="text-sm text-right">{post.timeAgo}</div>
+
+                            <div className="flex">
+                                <BsFillHeartFill  className="mr-2"/>
+                                {post.like}
+                                </div>
                         </div>
                     ))
                 )}
