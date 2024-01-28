@@ -105,8 +105,8 @@ const Feed = () => {
 
 
             {isOpenModal && (
-                <div className="w-full fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-4 rounded shadow-lg w-1/3 mb-5 relative">
+                <div className="md:w-full fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="m-4 bg-white p-4 rounded shadow-lg w-full md:w-1/3 mb-5 relative">
                         <button
                             className="absolute top-0 right-2 m-2 px-3 border rounded-lg hover:border-red-500 font-extrabold"
                             onClick={() => setIsOpenModal(false)}

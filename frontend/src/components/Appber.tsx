@@ -32,7 +32,7 @@ const Appber = () => {
                     </button>
                 </div>
                 {isMenuOpen && (
-                    <div className="md:hidden absolute top-20 right-2 bg-white border rounded-lg shadow-md w-2/4 text-center ">
+                    <div className="md:hidden absolute top-20 right-2 bg-white border rounded-lg shadow-md w-2/4 text-center item-center">
                         <ul className="flex flex-col space-y-3 p-2">
                             <NavItem to="/feed" currentPath={location.pathname} onClick={() => setIsMenuOpen(false)}>
                                 Feed
