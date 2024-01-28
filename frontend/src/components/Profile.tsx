@@ -42,7 +42,7 @@ const Profile = () => {
         fetchUserPosts()
     }, [])
     return <>
-        <div className="flex w-2/4 m-auto mt-32 " style={{ borderBottom: "1px solid #ccc" }}>
+        <div className="flex flex-col items-center md:w-2/4 m-auto mt-32 " style={{ borderBottom: "1px solid #ccc" }}>
             <div className="p-10">
                 <div className="font-semibold text-3xl text-gray-600">{user.user?.username}</div>
                 <div className="flex justify-start w-full gap-12 mt-3">
@@ -53,7 +53,7 @@ const Profile = () => {
                 </div>
             </div>
         </div>
-        <div className="flex w-2/4 m-auto mt-10 justify-between px-10">
+        <div className="flex item-center md:w-2/4 m-auto mt-10 justify-between px-10">
             <button className="font-bold hover:border-b-2" onClick={() => setActiveComponent('posts')}>Posts</button>
             <button className="font-bold hover:border-b-2" onClick={() => setActiveComponent('following')}>Following</button>
             <button className="font-bold hover:border-b-2" onClick={() => setActiveComponent('followers')}>Followers</button>
@@ -95,7 +95,7 @@ const Posts = ({ posts, loading }: { posts: Post[], loading: boolean }) => {
         )}
     </div>
 }
-const Followers = ({ user }: { user: { isLoading: boolean; user: User | null; } }) => {
+const Followers = ({ user }: { user: { isLoggedIn: boolean; user: User | null; } }) => {
 
     return <><div className="w-full m-auto mt-20 mb-10 flex flex-col md:w-2/4 ">
         {user.user?.followers.length === 0 ? (
@@ -116,7 +116,7 @@ const Followers = ({ user }: { user: { isLoading: boolean; user: User | null; } 
 
     </>
 }
-const Following = ({ user }: { user: { isLoading: boolean; user: User | null; } }) => {
+const Following = ({ user }: { user: { isLoggedIn: boolean; user: User | null; } }) => {
     return <div className="w-full m-auto mt-20 mb-10 flex flex-col md:w-2/4 ">
         {user.user?.following.length === 0 ? (
             <div className="text-center text-gray-600 mt-10">

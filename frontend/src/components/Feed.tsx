@@ -86,7 +86,7 @@ const Feed = () => {
     }, [])
     return <>
         <div className="w-full m-auto mt-24 mb-10 flex flex-col md:w-1/2 relative">
-            <button className="bg-rose-500 px-10 py-4 rounded-md font-bold w-1/12 shadow-xl text-lg hover:bg-pink-900 fixed top-25 z-10" style={{ color: '  #fdedec  ' }} onClick={handleOpenModal}>Write</button>
+            <button className="w-1/3 ml-3 bg-rose-500 px-10 py-4 rounded-md font-bold md:w-1/12 shadow-xl text-lg hover:bg-pink-900 fixed top-25 z-10" style={{ color: '  #fdedec  ' }} onClick={handleOpenModal}>Write</button>
 
             {posts.slice().reverse().map(post => (
                 <div key={post._id} className="rounded shadow-xl mt-20 px-10 py-4 ">

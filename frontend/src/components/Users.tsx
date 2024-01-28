@@ -6,7 +6,7 @@ import config from "../config";
 
 const MyUsers = () => {
     const [users, setUsers] = useRecoilState<Users[]>(usersState)
-    const [user, setUser] = useRecoilState<{ isLoading: boolean, user: null | User }>(userState)
+    const [user, setUser] = useRecoilState<{ isLoggedIn: boolean, user: null | User }>(userState)
     const url = config.backendUrl
     const userId = useRecoilValue(userState)
     const handleFollow = async (followId: string) => {

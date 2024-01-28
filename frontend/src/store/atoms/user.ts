@@ -11,10 +11,10 @@ export interface Followers {
     id:string;
     username:string
 }
-export const userState = atom <{isLoading:boolean ,user:null|User}>({
+export const userState = atom <{isLoggedIn:boolean ,user:null|User}>({
     key:'userState',
     default:{
-        isLoading:true,
+        isLoggedIn:false,
         user:null
     }
 })
