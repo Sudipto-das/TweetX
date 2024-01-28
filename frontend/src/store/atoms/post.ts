@@ -8,7 +8,7 @@ export interface Post{
     title: string;
     description: string;
     like: number;
-    likes: [];
+    likes: string[];
     created_at: string;
     userId: User
     timeAgo: string

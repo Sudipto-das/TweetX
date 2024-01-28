@@ -1,17 +1,47 @@
 import { useEffect, useState } from "react"
 import { postState } from "../store/atoms/post";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { calculateTimeAgo } from "../utils/timeUtils";
+import { BsFillHeartFill } from "react-icons/bs";
 import config from "../config";
+import { userState } from "../store/atoms/user";
 
 const Feed = () => {
-    
+
     const url = config.backendUrl
     const [posts, setPosts] = useRecoilState(postState)
     const [postContent, setPostContent] = useState('')
     const [isOpenModal, setIsOpenModal] = useState(false)
+    const user = useRecoilValue(userState)
     const handleOpenModal = () => {
         setIsOpenModal(true)
+    }
+    const handleLike = async (postId: string) => {
+        const response = await fetch(`${url}/post/like/${postId}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+                'Content-Type': 'application/json',
+            }
+        })
+        if (response.ok) {
+            const data = await response.json()
+            setPosts(prevPosts => {
+                return prevPosts.map(post => {
+                    if (post._id === postId) {
+                        return {
+                            ...post,
+                            like: data.like,
+                            likes: [...post.likes,...data.likes]
+                        }
+                        
+                    }
+                    return post
+                })
+            })
+        }
+        console.log('post'+ posts)
+
     }
     const handlePost = async () => {
         const response = await fetch(`${url}/post/create`, {
@@ -26,7 +56,7 @@ const Feed = () => {
         })
         if (response.ok) {
             const newPost = await response.json()
-            setPosts((prevPost) => [ ...prevPost,newPost])
+            setPosts((prevPost) => [...prevPost, newPost])
 
             setIsOpenModal(false)
 
@@ -48,7 +78,7 @@ const Feed = () => {
                 }
             ))
             setPosts(postsWithTime)
-            
+
         }
     }
     useEffect(() => {
@@ -63,6 +93,13 @@ const Feed = () => {
                     <div className="mb-2 font-medium text-2xl">{post.userId.username}</div>
                     <div>{post.description}</div>
                     <div className="text-sm text-right">{post.timeAgo}</div>
+                    <div className="flex ">
+                    <BsFillHeartFill
+                        className={`mr-2 cursor-pointer ${(post.likes as string[]).includes(user.user?.id || "") ? 'text-rose-500 ' :''}`}
+                        onClick={() => handleLike(post._id)}
+                    />
+                    {post.like}
+                    </div>
                 </div>
             ))}
 
