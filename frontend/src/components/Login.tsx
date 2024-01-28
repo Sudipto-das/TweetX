@@ -34,7 +34,7 @@ const Login = () => {
         if(response.ok){
             const data = await response.json()
             localStorage.setItem("token",data.token)
-            setUser({isLoading:false,user:{id:data.user._id,username:data.user.username,followers:data.user.followers,following:data.user.following}})
+            setUser({isLoggedIn:true,user:{id:data.user._id,username:data.user.username,followers:data.user.followers,following:data.user.following}})
             console.log(data)
             navigate('/feed')
         }
